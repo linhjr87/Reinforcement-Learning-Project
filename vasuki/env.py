@@ -201,9 +201,7 @@ class Vasuki:
                 reward = self.rewards['Movement']
         return reward
 
-    def step(self, action):
-        actionA = action['actionA']
-        actionB = action['actionB']
+    def step_two(self, actionA, actionB):
         # Applying the actions
         self.agentA, illegalA = self._movement_(actionA, self.agentA)
         self.agentB, illegalB = self._movement_(actionB, self.agentB)
@@ -230,16 +228,17 @@ class Vasuki:
                         _ = self._reward_(self.agentA, illegalA)
                         break
             elif self.agentA['score'] == self.agentB['score']:
-                rewardA = - abs(self.agentA['score']//2)
-                rewardB = - abs(self.agentB['score']//2)
+                rewardA = - abs(self.agentA['score'] // 2)
+                rewardB = - abs(self.agentB['score'] // 2)
+                scoreA, scoreB = self.agentA['score'], self.agentB['score']
                 while True:
-                    self.agentA = self._init_agent_(score=self.agentA['score'])
-                    if (self.agentA['state']!=self.agentB['state']).all():
+                    self.agentA = self._init_agent_(score=scoreA)
+                    if (self.agentA['state'] != self.agentB['state']).all():
                         _ = self._reward_(self.agentA, illegalA)
                         break
                 while True:
-                    self.agentB = self._init_agent_(score=self.agentB['score'])
-                    if (self.agentB['state']!=self.agentA['state']).all():
+                    self.agentB = self._init_agent_(score=scoreB)
+                    if (self.agentB['state'] != self.agentA['state']).all():
                         _ = self._reward_(self.agentB, illegalB)
                         break
         else:
