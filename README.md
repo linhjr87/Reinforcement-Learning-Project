@@ -43,7 +43,7 @@ vasuki/        # env.py, features.py, opponents.py, gym_wrapper.py, selfplay.py
 training/      # train_tabular.py, train_dqn.py, train_selfplay.py
 analysis/      # evaluate.py (round-robin win-rate), experiments.ipynb
 demo/          # demo.ipynb (pick 2 policies -> export a match video)
-models/        # best_qtable.pkl, dqn_random.zip, dqn_selfplay.zip
+models/        # qtable_new.pkl, dqn_random.zip, dqn_selfplay.zip
 tests/         # env, features, opponents, wrapper, and smoke tests
 ```
 
@@ -54,7 +54,7 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 
-# Tabular Q-learning baseline -> models/best_qtable.pkl (slow; reduce num_episodes for a quick run)
+# Tabular Q-learning baseline -> models/qtable_new.pkl (slow; reduce num_episodes for a quick run)
 python -m training.train_tabular
 
 # DQN vs. a random opponent -> models/dqn_random.zip
@@ -66,6 +66,28 @@ python -m training.train_selfplay --timesteps 1000000 --refresh 50000 --out mode
 # Tests
 pytest tests/ -q
 ```
+
+### GPU and training logs
+
+The DQN trainers (`train_dqn`, `train_selfplay`) accept a `--device` flag: `auto` (default; uses
+the GPU if one is available, otherwise CPU), `cuda`, or `cpu`. On startup each prints the resolved
+device and GPU name, then streams progress:
+
+```bash
+python -m training.train_dqn --timesteps 200000 --device auto --log-interval 10
+python -m training.train_selfplay --timesteps 1000000 --refresh 50000 --device cuda
+```
+
+- `train_dqn` / `train_selfplay` run with Stable-Baselines3 `verbose=1`, so SB3 prints its
+  loss/reward/fps table (`--log-interval` controls how often, in episodes); self-play also logs
+  each snapshot refresh with elapsed time.
+- `train_tabular` is pure NumPy and always runs on **CPU** (no GPU). Call it from Python with
+  `train_tabular(..., log_every=1000)` to print episode progress, current `epsilon`, and the
+  rolling average reward.
+
+> Note: for the small `MlpPolicy` networks here, DQN can run faster on CPU than GPU because
+> per-step kernel-launch overhead dominates the tiny batches. `--device auto` uses the GPU when
+> present; pass `--device cpu` if you find it quicker.
 
 Once the models above exist, open `analysis/experiments.ipynb` to plot learning curves and the
 win-rate matrix, and `demo/demo.ipynb` to export a video of a match between two chosen policies.

@@ -25,17 +25,27 @@ pytest tests/test_env.py -q                       # single file
 pytest tests/test_env.py::test_env_constructs -q  # single test
 
 # DQN vs. a random opponent -> models/dqn_random.zip
-python -m training.train_dqn --timesteps 200000 --out models/dqn_random.zip
+python -m training.train_dqn --timesteps 200000 --out models/dqn_random.zip --device auto
 
 # DQN via fictitious self-play -> models/dqn_selfplay.zip
-python -m training.train_selfplay --timesteps 1000000 --refresh 50000 --out models/dqn_selfplay.zip
+python -m training.train_selfplay --timesteps 1000000 --refresh 50000 --out models/dqn_selfplay.zip --device auto
 ```
 
 Note: `train_dqn` and `train_selfplay` have argparse CLI entry points, but **`training/train_tabular.py`
 has no `if __name__ == "__main__"` block** — `python -m training.train_tabular` runs nothing. To
 produce a Q-table, call `train_tabular(...)` from Python/a notebook (it defaults to 50k episodes and
-is slow). `models/best_qtable.pkl` is already committed, and `tests/test_opponents.py` reads it from
+is slow). `models/qtable_new.pkl` is already committed, and `tests/test_opponents.py` reads it from
 disk, so don't delete it.
+
+### Device selection and training logs
+
+Both DQN trainers take a `device` arg (CLI `--device`, values `auto`/`cuda`/`cpu`, default `auto`)
+threaded into the `DQN(...)` constructor; a shared `_pick_device()` helper (copy-pasted in
+`train_dqn.py` and `selfplay.py`) falls back to CPU with a warning if `cuda` is requested without a
+GPU. Both run SB3 with `verbose=1` and print a startup line with the resolved `model.device` + GPU
+name; self-play also logs each snapshot refresh. `train_tabular` is pure NumPy / **CPU-only** (no
+`device` arg) and takes a `log_every` kwarg for periodic episode/epsilon/reward logging. Note: for
+these small `MlpPolicy` nets, CPU is often faster than GPU (kernel-launch overhead on tiny batches).
 
 ## Architecture
 
@@ -104,6 +114,6 @@ weights. Training continues across chunks with `reset_num_timesteps=False`.
 - Some comments and test docstrings are in Vietnamese; keep or match the surrounding language when
   editing a given file.
 - Trained `.zip` models and rendered videos (`*.avi`, `*.mp4`) are gitignored; only
-  `models/best_qtable.pkl` is versioned.
+  `models/qtable_new.pkl` is versioned.
 - `analysis/experiments.ipynb` (learning curves + win-rate matrix) and `demo/demo.ipynb` (export a
   match video) consume the trained artifacts above and expect them to already exist on disk.

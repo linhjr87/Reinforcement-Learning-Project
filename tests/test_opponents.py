@@ -14,7 +14,7 @@ def test_random_opponent_in_range():
 
 def test_tabular_opponent_uses_qtable():
     env = Vasuki(**CONFIG)
-    with open("models/best_qtable.pkl", "rb") as f:
+    with open("models/qtable_new.pkl", "rb") as f:
         q_table = pickle.load(f)
     opp = TabularOpponent(q_table)
     assert opp.act(env) in (0, 1, 2)
