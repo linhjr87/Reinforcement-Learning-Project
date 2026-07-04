@@ -22,8 +22,11 @@ Order: notebooks 1–3 are independent; notebook 4's Elo section consumes their 
 agents from `artifacts/` (missing ones are skipped with a warning); `summary.ipynb` last.
 
 Each notebook's config cell has course-scale defaults with full-scale values in comments.
-Note: for these small MLP policies CPU is often faster than GPU (kernel-launch overhead
-on tiny batches); `DEVICE = "auto"` uses the GPU when present.
+The config cell resolves `DEVICE = "cuda"` when a CUDA GPU is available (falling back to
+`"cpu"`) and prints the device it trains on, so DQN training runs on the GPU when present.
+Note: for these small MLP policies the CPU is often as fast or faster than the GPU
+(kernel-launch overhead on tiny batches dominates, and the env loop is CPU-bound); set
+`DEVICE = "cpu"` in the config cell if you find it quicker, especially at course scale.
 
 ## Results
 
