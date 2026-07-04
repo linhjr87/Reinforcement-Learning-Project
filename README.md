@@ -27,4 +27,8 @@ on tiny batches); `DEVICE = "auto"` uses the GPU when present.
 
 ## Results
 
-Filled in after running the notebooks — see `summary.ipynb`.
+This branch ships with `results/` empty (only a `.gitkeep`) — result JSONs are generated
+locally, not committed. To regenerate: run notebooks 1 -> 4 top-to-bottom (each writes its
+own `results/direction<N>_*.json`; direction 4 additionally writes `results/elo_ratings.json`),
+then run `summary.ipynb` last to aggregate everything into a master table and an Elo ranking
+chart with confidence intervals.
