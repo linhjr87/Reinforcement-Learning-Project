@@ -1,7 +1,21 @@
+# Core RL + numerics
 numpy>=1.24
 gymnasium>=0.29
 stable_baselines3>=2.0
 torch>=2.0
+nqueens
+
+# Data / plotting (summary notebook uses pandas)
 matplotlib>=3.7
 pandas>=2.0
-nqueens
+
+# Jupyter runtime to open and run the notebooks
+jupyterlab>=4.0
+ipykernel>=6.0
+nbconvert>=7.0
+nbformat>=5.0
+
+# GPU training: `torch>=2.0` above installs the CPU-only wheel from PyPI.
+# For CUDA, install the matching GPU build instead, e.g. (CUDA 12.8):
+#   pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cu128
+# The notebooks auto-detect the GPU (DEVICE = "cuda" when available, else "cpu").
