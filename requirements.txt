@@ -15,6 +15,9 @@ ipykernel>=6.0
 nbconvert>=7.0
 nbformat>=5.0
 
+# Video export (demo.ipynb only -- not needed by the 4 direction notebooks)
+opencv-python>=4.8
+
 # GPU training: `torch>=2.0` above installs the CPU-only wheel from PyPI.
 # For CUDA, install the matching GPU build instead, e.g. (CUDA 12.8):
 #   pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cu128

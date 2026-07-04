@@ -10,6 +10,7 @@ directions, each in one fully self-contained notebook (no imports from the paren
 | `direction3_reward_shaping.ipynb` | How do collision rewards shape emergent behavior? |
 | `direction4_pomdp_elo.ipynb` | Is the missing enemy head direction a bottleneck? + Elo ranking of all agents |
 | `summary.ipynb` | Cross-direction comparison from saved results (no training) |
+| `demo.ipynb` | Renders one full match between two saved agents to a video (`demo/match_demo.avi`) |
 
 ## How to run
 
@@ -20,6 +21,9 @@ jupyter lab   # run notebooks top-to-bottom from this directory
 
 Order: notebooks 1–3 are independent; notebook 4's Elo section consumes their saved
 agents from `artifacts/` (missing ones are skipped with a warning); `summary.ipynb` last.
+`demo.ipynb` can run any time — it also consumes `artifacts/direction<N>_best.zip` (falling
+back to `RandomOpponent` with a warning per side if an artifact is missing) and requires
+`opencv-python`, which the other four notebooks do not need.
 
 Each notebook's config cell has course-scale defaults with full-scale values in comments.
 The config cell resolves `DEVICE = "cuda"` when a CUDA GPU is available (falling back to
