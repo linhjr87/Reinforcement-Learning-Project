@@ -3,7 +3,7 @@ from vasuki.env import Vasuki
 
 
 def _act_as_b(opp_b, env):
-    # opponent quyết định như "A"; tráo tạm để nó điều khiển agent B
+    # opponent decides as if it were "A"; temporarily swap so it drives agent B
     env.agentA, env.agentB = env.agentB, env.agentA
     try:
         return opp_b.act(env)

@@ -23,4 +23,4 @@ def test_step_returns_five_values():
 def test_sb3_check_env():
     from stable_baselines3.common.env_checker import check_env
     env = GymWrapper(CONFIG, RandomOpponent())
-    check_env(env, warn=True)  # không raise
+    check_env(env, warn=True)  # must not raise

@@ -54,8 +54,9 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 
-# Tabular Q-learning baseline -> models/qtable_new.pkl (slow; reduce num_episodes for a quick run)
-python -m training.train_tabular
+# Tabular Q-learning baseline -> models/qtable_new.pkl (slow; reduce --episodes for a quick run)
+# WARNING: --out defaults to the committed models/qtable_new.pkl and overwrites it
+python -m training.train_tabular --episodes 50000 --out models/qtable_new.pkl
 
 # DQN vs. a random opponent -> models/dqn_random.zip
 python -m training.train_dqn --timesteps 200000 --out models/dqn_random.zip

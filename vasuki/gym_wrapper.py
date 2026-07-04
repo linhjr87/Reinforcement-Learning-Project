@@ -20,7 +20,7 @@ class GymWrapper(gym.Env):
         self.opponent = opponent
 
     def _opponent_action(self):
-        # Tráo tạm để opponent (vốn quyết định như "A") điều khiển agent B
+        # Temporarily swap so the opponent (which decides as "A") drives agent B
         self.raw_env.agentA, self.raw_env.agentB = self.raw_env.agentB, self.raw_env.agentA
         try:
             return self.opponent.act(self.raw_env)

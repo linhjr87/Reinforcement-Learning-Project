@@ -29,7 +29,7 @@ def test_tie_collision_does_not_crash():
     env.agentB["state"] = np.array([3, 3])
     env.agentA["head"] = 1
     env.agentB["head"] = 1
-    rewardA, rewardB, done, info = env.step_two(1, 1)  # phải chạy không lỗi
+    rewardA, rewardB, done, info = env.step_two(1, 1)  # must run without error
     assert (env.agentA["state"] != env.agentB["state"]).any()
 
 
@@ -43,7 +43,7 @@ def test_food_always_four_live():
 def test_illegal_move_keeps_position():
     env = Vasuki(**CONFIG)
     env.agentA["state"] = np.array([0, 0])
-    env.agentA["head"] = 0  # North, đâm tường trên khi đi thẳng
+    env.agentA["head"] = 0  # North, hits the top wall when moving straight
     before = env.agentA["state"].copy()
     modified, illegal = env._movement_(1, env.agentA)  # forward
     assert illegal == 1

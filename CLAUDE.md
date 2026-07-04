@@ -31,11 +31,16 @@ python -m training.train_dqn --timesteps 200000 --out models/dqn_random.zip --de
 python -m training.train_selfplay --timesteps 1000000 --refresh 50000 --out models/dqn_selfplay.zip --device auto
 ```
 
-Note: `train_dqn` and `train_selfplay` have argparse CLI entry points, but **`training/train_tabular.py`
-has no `if __name__ == "__main__"` block** — `python -m training.train_tabular` runs nothing. To
-produce a Q-table, call `train_tabular(...)` from Python/a notebook (it defaults to 50k episodes and
-is slow). `models/qtable_new.pkl` is already committed, and `tests/test_opponents.py` reads it from
-disk, so don't delete it.
+Note: all three trainers now have argparse CLI entry points. `train_tabular` defaults to 50k
+episodes and is slow, so also usable from Python/a notebook (`training/train_tabular.ipynb`):
+
+```bash
+# Tabular Q-learning -> models/qtable_new.pkl (WARNING: overwrites the committed table)
+python -m training.train_tabular --episodes 50000 --out models/qtable_new.pkl
+```
+
+`models/qtable_new.pkl` is already committed, and `tests/test_opponents.py` reads it from disk, so
+don't delete it (and beware `--out models/qtable_new.pkl` overwrites it).
 
 ### Device selection and training logs
 
@@ -111,8 +116,7 @@ weights. Training continues across chunks with `reset_num_timesteps=False`.
 
 ## Conventions
 
-- Some comments and test docstrings are in Vietnamese; keep or match the surrounding language when
-  editing a given file.
+- All comments, docstrings, and log messages are in English; keep new code English too.
 - Trained `.zip` models and rendered videos (`*.avi`, `*.mp4`) are gitignored; only
   `models/qtable_new.pkl` is versioned.
 - `analysis/experiments.ipynb` (learning curves + win-rate matrix) and `demo/demo.ipynb` (export a
